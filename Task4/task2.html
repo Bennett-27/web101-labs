@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade Checker</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eef1f6;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+
+  .card {
+    background: #ffffff;
+    width: 400px;
+    padding: 40px 32px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+
+  h1 {
+    margin: 0 0 24px;
+    font-size: 32px;
+    font-weight: 800;
+    color: #111111;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  #scoreInput {
+    flex: 1;
+    max-width: 220px;
+    padding: 12px 14px;
+    font-size: 18px;
+    border: 2px solid #cfd4dc;
+    border-radius: 8px;
+    outline: none;
+    color: #222;
+  }
+
+  #scoreInput:focus {
+    border-color: #2f5be0;
+  }
+
+  #checkBtn {
+    background-color: #1c2b52;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 0 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  #checkBtn:hover {
+    background-color: #16234a;
+  }
+
+  #result {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 700;
+    min-height: 28px;
+  }
+
+  .grade-A { color: #1f9d55; }
+  .grade-B { color: #2f5be0; }
+  .grade-C { color: #e08e0b; }
+  .grade-F { color: #e02020; }
+  .error   { color: #e02020; }
+</style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Grade Checker</h1>
+
+    <div class="input-row">
+      <input type="number" id="scoreInput" placeholder="0 - 100" min="0" max="100">
+      <button id="checkBtn">Check</button>
+    </div>
+
+    <p id="result"></p>
+  </div>
+
+  <script>
+    const scoreInput = document.getElementById('scoreInput');
+    const checkBtn = document.getElementById('checkBtn');
+    const result = document.getElementById('result');
+
+    function getGrade(score) {
+      if (score >= 80) return 'A';
+      if (score >= 70) return 'B';
+      if (score >= 50) return 'C';
+      return 'F';
+    }
+
+    function checkScore() {
+      const value = scoreInput.value.trim();
+
+      if (value === '' || isNaN(value)) {
+        result.textContent = 'Please enter a valid number.';
+        result.className = 'error';
+        return;
+      }
+
+      const score = Number(value);
+
+      if (score < 0 || score > 100) {
+        result.textContent = 'Please enter a number between 0 and 100.';
+        result.className = 'error';
+        return;
+      }
+
+      const grade = getGrade(score);
+      result.textContent = `Score: ${score} - Grade ${grade}`;
+      result.className = `grade-${grade}`;
+    }
+
+    checkBtn.addEventListener('click', checkScore);
+
+    scoreInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') checkScore();
+    });
+  </script>
+
+</body>
+</html>

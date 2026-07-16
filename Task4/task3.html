@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multiplication Table</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    background-color: #eef1f6;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    padding: 60px 20px;
+  }
+
+  .container {
+    text-align: center;
+  }
+
+  h1 {
+    margin: 0 0 24px;
+    font-size: 34px;
+    font-weight: 800;
+    color: #111111;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+
+  #numberInput {
+    width: 160px;
+    padding: 12px 14px;
+    font-size: 18px;
+    border: 2px solid #cfd4dc;
+    border-radius: 8px;
+    outline: none;
+    color: #222;
+  }
+
+  #numberInput:focus {
+    border-color: #2f5be0;
+  }
+
+  #generateBtn {
+    background-color: #1c2b52;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 0 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  #generateBtn:hover {
+    background-color: #16234a;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 340px;
+    margin: 0 auto;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  thead th {
+    background-color: #1c2b52;
+    color: #ffffff;
+    padding: 14px 0;
+    font-size: 16px;
+  }
+
+  tbody td {
+    padding: 12px 0;
+    font-size: 16px;
+    border: 1px solid #dfe3ea;
+    text-align: center;
+    color: #222;
+  }
+
+  tbody tr:nth-child(odd) {
+    background-color: #e9edf5;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: #ffffff;
+  }
+
+  .error {
+    color: #e02020;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Multiplication Table</h1>
+
+    <div class="input-row">
+      <input type="number" id="numberInput" placeholder="Enter number">
+      <button id="generateBtn">Generate</button>
+    </div>
+
+    <div id="output"></div>
+  </div>
+
+  <script>
+    const numberInput = document.getElementById('numberInput');
+    const generateBtn = document.getElementById('generateBtn');
+    const output = document.getElementById('output');
+
+    function generateTable() {
+      const value = numberInput.value.trim();
+
+      if (value === '' || isNaN(value)) {
+        output.innerHTML = '<p class="error">Please enter a valid number.</p>';
+        return;
+      }
+
+      const num = Number(value);
+      let rows = '';
+
+      for (let i = 1; i <= 9; i++) {
+        rows += `
+          <tr>
+            <td>${num} x ${i}</td>
+            <td>${num * i}</td>
+          </tr>`;
+      }
+
+      output.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Expression</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      `;
+    }
+
+    generateBtn.addEventListener('click', generateTable);
+
+    numberInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') generateTable();
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Scores</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding-top: 100px;
+    }
+
+    .scores-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 450px;
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+
+    h1 {
+      color: #000000;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    .score-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .score-high { color: #008000; }   /* >= 90 (Green) */
+    .score-medium { color: #cc9900; } /* 60 - 89 (Orange/Yellow) */
+    .score-low { color: #ff0000; }    /* < 60 (Red) */
+
+    .stats {
+      font-size: 16px;
+      font-weight: 600;
+      color: #334e68;
+      margin-bottom: 24px;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #score-input {
+      width: 140px;
+      padding: 10px 12px;
+      border: 1px solid #c0d1e5;
+      border-radius: 6px;
+      font-size: 15px;
+      outline: none;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+
+    #score-input:focus {
+      border-color: #0f2d59;
+      box-shadow: 0 0 0 1px #0f2d59;
+    }
+
+    #score-input:focus::placeholder {
+      color: transparent;
+    }
+
+    #add-btn {
+      background-color: #0f2d59;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    #add-btn:hover {
+      background-color: #00112c;
+    }
+
+    #score-input::-webkit-outer-spin-button,
+    #score-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    #score-input {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="scores-card">
+    <h1>Student Scores</h1>
+    
+    <div class="score-list" id="score-container">
+      <div class="score-low">45</div>
+      <div class="score-medium">82</div>
+      <div class="score-high">91</div>
+      <div class="score-medium">60</div>
+      <div class="score-medium">77</div>
+      <div class="score-low">33</div>
+    </div>
+
+    <div class="stats" id="stats-display">
+      Highest: 91 | Lowest: 33 | Average: 64.7
+    </div>
+
+    <div class="input-group">
+      <input type="number" id="score-input" placeholder="New score" autocomplete="off">
+      <button id="add-btn">Add score</button>
+    </div>
+  </div>
+
+  <script>
+    const scoreContainer = document.getElementById('score-container');
+    const statsDisplay = document.getElementById('stats-display');
+    const scoreInput = document.getElementById('score-input');
+    const addBtn = document.getElementById('add-btn');
+
+    let scores = [45, 82, 91, 60, 77, 33];
+
+    function updateUI() {
+      scoreContainer.innerHTML = '';
+      scores.forEach(score => {
+        const div = document.createElement('div');
+        div.textContent = score;
+        
+        if (score >= 90) {
+          div.className = 'score-high';
+        } else if (score >= 60) {
+          div.className = 'score-medium';
+        } else {
+          div.className = 'score-low';
+        }
+        scoreContainer.appendChild(div);
+      });
+
+      if (scores.length === 0) {
+        statsDisplay.textContent = 'Highest: 0 | Lowest: 0 | Average: 0.0';
+        return;
+      }
+
+      const highest = Math.max(...scores);
+      const lowest = Math.min(...scores);
+      const sum = scores.reduce((acc, curr) => acc + curr, 0);
+      const average = (sum / scores.length).toFixed(1);
+
+      statsDisplay.textContent = `Highest: ${highest} | Lowest: ${lowest} | Average: ${average}`;
+    }
+
+    function addScore() {
+      const value = scoreInput.value.trim();
+      
+      if (value === '') return;
+      
+      const numericScore = Number(value);
+
+      if (numericScore < 0 || numericScore > 100 || isNaN(numericScore)) {
+        alert('Please enter a score between 0 and 100');
+        return;
+      }
+
+      scores.push(numericScore);
+      scoreInput.value = '';
+      
+      updateUI();
+    }
+
+    addBtn.addEventListener('click', addScore);
+    
+    scoreInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        addScore();
+      }
+    });
+  </script>
+</body>
+</html>
